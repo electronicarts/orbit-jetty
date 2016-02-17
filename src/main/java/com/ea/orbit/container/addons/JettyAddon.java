@@ -26,18 +26,21 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ea.orbit.web;
+package com.ea.orbit.container.addons;
 
-import com.ea.orbit.container.Container;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by joe@bioware.com on 2016-02-16.
  */
-public class Bootstrap
+public class JettyAddon implements Addon
 {
-    public static void main(String[] args)
+    @Override
+    public List<String> getPackagesToScan()
     {
-        final Container container = new Container();
-        container.start();
+        final List<String> packages = new ArrayList<>();
+        packages.add("com.ea.orbit.web");
+        return packages;
     }
 }
