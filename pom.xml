@@ -29,13 +29,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ea.orbit</groupId>
     <artifactId>orbit-jetty</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.8.0-SNAPSHOT</version>
     <name>Orbit Jetty Framework</name>
     <description>Jetty application framework for Orbit.</description>
     <url>https://github.com/electronicarts/orbit-jetty/</url>
 
     <properties>
-        <orbit.version>0.8.0-SNAPSHOT</orbit.version>
+        <orbit.version>0.8.0-preview2</orbit.version>
         <jackson.version>2.6.3</jackson.version>
         <jersey.version>2.22.1</jersey.version>
         <jetty.version>9.3.6.v20151106</jetty.version>
