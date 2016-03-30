@@ -33,9 +33,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <artifactId>orbit-java-parent</artifactId>
         <version>1</version>
     </parent>
-	
+
+    <groupId>cloud.orbit</groupId>
     <artifactId>orbit-jetty</artifactId>
-    <version>0.8.0-preview2</version>
+    <version>0.8.0</version>
     <name>Orbit Jetty Framework</name>
     <description>Jetty application framework for Orbit.</description>
     <url>https://github.com/electronicarts/orbit-jetty/</url>
