@@ -29,8 +29,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-        <groupId>com.ea.orbit</groupId>
-        <artifactId>orbit-parent</artifactId>
+        <groupId>cloud.orbit</groupId>
+        <artifactId>orbit-java-parent</artifactId>
         <version>1</version>
     </parent>
 	
@@ -41,31 +41,27 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <url>https://github.com/electronicarts/orbit-jetty/</url>
 
     <properties>
-        <orbit.version>0.8.0-preview3</orbit.version>
-		<orbit.hk2.version>0.8.0-preview3</orbit.hk2.version>
-        <jackson.version>2.6.3</jackson.version>
+        <orbit.version>0.8.0</orbit.version>
+		<orbit.hk2.version>0.8.0</orbit.hk2.version>
+        <jackson.version>2.7.3</jackson.version>
         <jersey.version>2.22.1</jersey.version>
-        <jetty.version>9.3.6.v20151106</jetty.version>
-        <project.target.jdk>1.8</project.target.jdk>
-        <project.source.jdk>1.8</project.source.jdk>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <jetty.version>9.3.8.v20160314</jetty.version>
     </properties>
 
     <scm>
-        <url>https://github.com/electronicarts/orbit-jetty</url>
-        <connection>scm:git:git://github.com/electronicarts/orbit-jetty.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/electronicarts/orbit-jetty.git</developerConnection>
+        <url>https://github.com/orbit/orbit-jetty</url>
+        <connection>scm:git:git://github.com/orbit/orbit-jetty.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/orbit/orbit-jetty.git</developerConnection>
     </scm>
 
     <dependencies>
         <dependency>
-            <groupId>com.ea.orbit</groupId>
+            <groupId>cloud.orbit</groupId>
             <artifactId>orbit-core</artifactId>
             <version>${orbit.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.ea.orbit</groupId>
+            <groupId>cloud.orbit</groupId>
             <artifactId>orbit-hk2</artifactId>
             <version>${orbit.hk2.version}</version>
         </dependency>
@@ -128,7 +124,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </dependency>
 
         <dependency>
-            <groupId>com.ea.orbit</groupId>
+            <groupId>cloud.orbit</groupId>
             <artifactId>orbit-actor-tests</artifactId>
             <version>${orbit.version}</version>
             <scope>test</scope>

@@ -26,11 +26,11 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ea.orbit.web.test;
+package cloud.orbit.web.test;
 
-import com.ea.orbit.container.Container;
-import com.ea.orbit.util.IOUtils;
-import com.ea.orbit.util.NetUtils;
+import cloud.orbit.container.Container;
+import cloud.orbit.util.IOUtils;
+import cloud.orbit.util.NetUtils;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

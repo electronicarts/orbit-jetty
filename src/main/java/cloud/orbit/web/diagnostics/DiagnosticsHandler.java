@@ -26,21 +26,52 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ea.orbit.container.addons;
+package cloud.orbit.web.diagnostics;
 
-import java.util.ArrayList;
-import java.util.List;
+import cloud.orbit.concurrent.Task;
 
-/**
- * Created by joe@bioware.com on 2016-02-16.
- */
-public class JettyAddon implements Addon
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import java.util.Date;
+
+@Path("/orbit/diagnostics")
+public class DiagnosticsHandler
 {
-    @Override
-    public List<String> getPackagesToScan()
+    public static class HealthcheckResult
     {
-        final List<String> packages = new ArrayList<>();
-        packages.add("com.ea.orbit.web");
-        return packages;
+        private Boolean alive = true;
+        private Date serverTime = new Date();
+
+        public Boolean getAlive()
+        {
+            return alive;
+        }
+
+        public void setAlive(Boolean alive)
+        {
+            this.alive = alive;
+        }
+
+        public Date getServerTime()
+        {
+            return serverTime;
+        }
+
+        public void setServerTime(Date serverTime)
+        {
+            this.serverTime = serverTime;
+        }
+    }
+
+    @GET
+    @Path("/healthcheck")
+    @Produces(MediaType.APPLICATION_JSON)
+    public HealthcheckResult getHealthCheck()
+    {
+        final HealthcheckResult healthcheckResult = new HealthcheckResult();
+        return healthcheckResult;
     }
 }

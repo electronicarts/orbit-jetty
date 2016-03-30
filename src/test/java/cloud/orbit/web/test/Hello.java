@@ -26,10 +26,10 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ea.orbit.web.test;
+package cloud.orbit.web.test;
 
-import com.ea.orbit.concurrent.Task;
-import com.ea.orbit.exception.UncheckedException;
+import cloud.orbit.concurrent.Task;
+import cloud.orbit.exception.UncheckedException;
 
 import javax.inject.Singleton;
 import javax.ws.rs.ForbiddenException;

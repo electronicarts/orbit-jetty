@@ -26,12 +26,12 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ea.orbit.web;
+package cloud.orbit.web;
 
-import com.ea.orbit.concurrent.Task;
-import com.ea.orbit.container.Container;
-import com.ea.orbit.exception.UncheckedException;
-import com.ea.orbit.lifecycle.Startable;
+import cloud.orbit.concurrent.Task;
+import cloud.orbit.container.Container;
+import cloud.orbit.exception.UncheckedException;
+import cloud.orbit.lifecycle.Startable;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;

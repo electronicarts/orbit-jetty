@@ -26,18 +26,20 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ea.orbit.web;
+package cloud.orbit.web.test;
 
-import com.ea.orbit.container.Container;
+import cloud.orbit.container.Container;
 
 /**
  * Created by joe@bioware.com on 2016-02-16.
  */
-public class Bootstrap
+public class HelloMain
 {
-    public static void main(String[] args)
+    public static void main(final String args[]) throws Exception
     {
-        final Container container = new Container();
+        Container container = new Container();
         container.start();
+        System.in.read();
+        container.stop();
     }
 }

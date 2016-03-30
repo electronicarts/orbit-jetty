@@ -26,9 +26,9 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ea.orbit.web.provider;
+package cloud.orbit.web.provider;
 
-import com.ea.orbit.concurrent.Task;
+import cloud.orbit.concurrent.Task;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.Provider;

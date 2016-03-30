@@ -26,7 +26,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.ea.orbit.web.test;
+package cloud.orbit.web.test;
 
 import javax.websocket.CloseReason;
 import javax.websocket.OnClose;
