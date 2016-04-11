@@ -1,0 +1,5 @@
+cloud.orbit.actors.Stage:
+  !!cloud.orbit.actors.Stage
+  {
+    clusterName: orbit-jetty-tests
+  }
