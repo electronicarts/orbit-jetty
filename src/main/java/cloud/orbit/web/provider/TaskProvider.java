@@ -74,7 +74,7 @@ public class TaskProvider implements WriterInterceptor
             else
             {
 
-                // Result is no, throw a 204
+                // Result is null, throw a 204
                 throw new WebApplicationException(204);
             }
         }
