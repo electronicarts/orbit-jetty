@@ -147,5 +147,13 @@ public class Hello
         return Task.fromValue(results);
     }
 
+    @GET
+    @Path("/voidTask")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Task<Void> getVoidTask()
+    {
+        return Task.done();
+    }
+
 
 }
