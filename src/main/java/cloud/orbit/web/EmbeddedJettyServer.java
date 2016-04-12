@@ -46,6 +46,8 @@ import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainer
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.servlet.ServletProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -59,7 +61,6 @@ import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by joe@bioware.com on 2016-02-16.
@@ -71,7 +72,7 @@ public class EmbeddedJettyServer implements Startable
     @Inject
     Container container;
 
-    private static final Logger logger = Logger.getLogger(EmbeddedJettyServer.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(EmbeddedJettyServer.class);
 
     private Server server;
 
@@ -82,26 +83,34 @@ public class EmbeddedJettyServer implements Startable
     public Task start()
     {
 
+        logger.info("Starting Jetty server...");
+
         final List<Class<?>> classes = container.getDiscoveredClasses();
 
         final ResourceConfig resourceConfig = new ResourceConfig();
 
+        // Discover only JAX-RS handlers and providers
         classes.stream()
-                .filter(r -> r.isAnnotationPresent(Path.class) || r.isAnnotationPresent(Provider.class))
+                .filter(r ->
+                        (r.isAnnotationPresent(Path.class) || r.isAnnotationPresent(Provider.class))
+                        && !r.isAnnotationPresent(ServerEndpoint.class)
+                        && !Servlet.class.isAssignableFrom(r))
                 .forEach(resourceConfig::register);
 
 
         final WebAppContext webAppContext = new WebAppContext();
         final ProtectionDomain protectionDomain = EmbeddedJettyServer.class.getProtectionDomain();
         final URL location = protectionDomain.getCodeSource().getLocation();
+
         logger.info(location.toExternalForm());
         webAppContext.setInitParameter("useFileMappedBuffer", "false");
         webAppContext.setWar(location.toExternalForm());
-        // this sets the default service locator to one that bridges to the orbit container.
+
         webAppContext.getServletContext().setAttribute(ServletProperties.SERVICE_LOCATOR, container.getServiceLocator());
         webAppContext.setContextPath("/*");
         webAppContext.addServlet(new ServletHolder(new ServletContainer(resourceConfig)), "/*");
 
+        // Resource support
         final ContextHandler resourceContext = new ContextHandler();
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
@@ -112,7 +121,7 @@ public class EmbeddedJettyServer implements Startable
         resourceContext.setInitParameter("useFileMappedBuffer", "false");
 
 
-
+        // Discover Servlets
         classes.stream()
                 .filter(r -> r.isAnnotationPresent(Path.class) && Servlet.class.isAssignableFrom(r))
                 .forEach(r ->
@@ -132,6 +141,7 @@ public class EmbeddedJettyServer implements Startable
         server = new Server(port);
         server.setHandler(contexts);
 
+        // Discover websockets
         try
         {
             ///Initialize javax.websocket layer
@@ -180,7 +190,7 @@ public class EmbeddedJettyServer implements Startable
         }
         catch (Exception e)
         {
-            logger.severe("Error starting jetty: " + e.toString());
+            logger.error("Error starting jetty: " + e.toString());
             throw new UncheckedException(e);
         }
 
@@ -191,9 +201,11 @@ public class EmbeddedJettyServer implements Startable
         }
         catch (Exception e)
         {
-            logger.severe("Error starting jetty: " + e.toString());
+            logger.error("Error starting jetty: " + e.toString());
             throw new UncheckedException(e);
         }
+
+        logger.info("Jetty server started.");
 
         return Task.done();
     }
@@ -207,7 +219,7 @@ public class EmbeddedJettyServer implements Startable
         }
         catch (Exception e)
         {
-            logger.severe("Error stopping jetty: " + e.toString());
+            logger.error("Error stopping jetty: " + e.toString());
             throw new UncheckedException(e);
         }
         return Task.done();
