@@ -133,6 +133,20 @@ public class WebTest
     }
 
     @Test
+    public void headerSizeTest()
+    {
+        assertEquals(200, ClientBuilder.newClient().target(getHttpPath())
+                .path("test/helloRaw").request(MediaType.APPLICATION_JSON)
+                .header("X-Big-Header", new String(new char[1024]).replace("\0", "X"))
+                .get().getStatus());
+
+        assertEquals(413, ClientBuilder.newClient().target(getHttpPath())
+                .path("test/helloRaw").request(MediaType.APPLICATION_JSON)
+                .header("X-Big-Header", new String(new char[65536]).replace("\0", "X"))
+                .get().getStatus());
+    }
+
+    @Test
     public void taskTest()
     {
         assertEquals(200, ClientBuilder.newClient().target(getHttpPath())

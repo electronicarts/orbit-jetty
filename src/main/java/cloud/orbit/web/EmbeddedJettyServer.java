@@ -28,13 +28,17 @@
 
 package cloud.orbit.web;
 
+import cloud.orbit.annotation.Config;
 import cloud.orbit.concurrent.Task;
 import cloud.orbit.container.Container;
 import cloud.orbit.exception.UncheckedException;
 import cloud.orbit.lifecycle.Startable;
 
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -76,7 +80,17 @@ public class EmbeddedJettyServer implements Startable
 
     private Server server;
 
+    @Config("orbit.jetty.port")
     private int port = 9090;
+
+    @Config("orbit.jetty.requestHeaderSize")
+    private Integer requestHeaderSize = null;
+
+    @Config("orbit.jetty.responseHeaderSize")
+    private Integer responseHeaderSize = null;
+
+    @Config("orbit.jetty.outputBufferSize")
+    private Integer outputBufferSize = null;
 
 
     @Override
@@ -138,7 +152,25 @@ public class EmbeddedJettyServer implements Startable
         final ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(handlers.toArray(new Handler[handlers.size()]));
 
-        server = new Server(port);
+        server = new Server();
+
+        // Configure HTTP properties
+        final HttpConfiguration httpConfiguration = new HttpConfiguration();
+        if(requestHeaderSize != null) httpConfiguration.setRequestHeaderSize(requestHeaderSize);
+        if(responseHeaderSize != null) httpConfiguration.setResponseHeaderSize(responseHeaderSize);
+        if(outputBufferSize != null) httpConfiguration.setOutputBufferSize(outputBufferSize);
+        final HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfiguration);
+
+        // Create connector
+        List<ServerConnector> connectors = new ArrayList<>();
+        final ServerConnector connector = new ServerConnector(server, httpConnectionFactory);
+        connector.setPort(port);
+        connectors.add(connector);
+
+        // Create the server
+        ServerConnector[] actualList = new ServerConnector[connectors.size()];
+        actualList = connectors.toArray(actualList);
+        server.setConnectors(actualList);
         server.setHandler(contexts);
 
         // Discover websockets
