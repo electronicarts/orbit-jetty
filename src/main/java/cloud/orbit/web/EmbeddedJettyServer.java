@@ -121,7 +121,7 @@ public class EmbeddedJettyServer implements Startable
         webAppContext.setWar(location.toExternalForm());
 
         webAppContext.getServletContext().setAttribute(ServletProperties.SERVICE_LOCATOR, container.getServiceLocator());
-        webAppContext.setContextPath("/*");
+        webAppContext.setContextPath("/");
         webAppContext.addServlet(new ServletHolder(new ServletContainer(resourceConfig)), "/*");
 
         // Resource support

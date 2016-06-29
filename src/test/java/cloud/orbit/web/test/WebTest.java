@@ -235,6 +235,17 @@ public class WebTest
         client.session.close();
     }
 
+
+    @Test
+    public void webResourceTest() throws IOException
+    {
+        Response webResTest = ClientBuilder.newClient().target(getHttpPath())
+                .path("test.htm").request(MediaType.TEXT_PLAIN)
+                .get();
+        assertEquals(200, webResTest.getStatus());
+        assertEquals("test-web-resource-42", IOUtils.toString((InputStream) webResTest.getEntity()));
+    }
+
     @Test
     public void servletTest() throws IOException
     {
@@ -246,4 +257,5 @@ public class WebTest
         assertEquals(200, servlet1.getStatus());
         assertEquals("hello", IOUtils.toString((InputStream) servlet1.getEntity()));
     }
+
 }
