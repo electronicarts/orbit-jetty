@@ -140,7 +140,7 @@ public class WebTest
                 .header("X-Big-Header", new String(new char[1024]).replace("\0", "X"))
                 .get().getStatus());
 
-        assertEquals(413, ClientBuilder.newClient().target(getHttpPath())
+        assertEquals(431, ClientBuilder.newClient().target(getHttpPath())
                 .path("test/helloRaw").request(MediaType.APPLICATION_JSON)
                 .header("X-Big-Header", new String(new char[65536]).replace("\0", "X"))
                 .get().getStatus());
