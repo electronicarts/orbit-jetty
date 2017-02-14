@@ -34,16 +34,20 @@ import cloud.orbit.container.Container;
 import cloud.orbit.exception.UncheckedException;
 import cloud.orbit.lifecycle.Startable;
 
+import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
@@ -91,6 +95,36 @@ public class EmbeddedJettyServer implements Startable
 
     @Config("orbit.jetty.outputBufferSize")
     private Integer outputBufferSize = null;
+
+
+    // SSL config
+
+    @Config("orbit.jetty.ssl.enabled")
+    private boolean enableSSL = false;
+
+    @Config("orbit.jetty.ssl.keyStore.path")
+    private String sslKeyStorePath = null;
+
+    @Config("orbit.jetty.ssl.keyStore.password")
+    private String sslKeyStorePassword = null;
+
+    @Config("orbit.jetty.ssl.keyManager.password")
+    private String sslKeyManagerPassword = null;
+
+    @Config("orbit.jetty.ssl.trustStore.path")
+    private String sslTrustStorePath = null;
+
+    @Config("orbit.jetty.ssl.trustStore.password")
+    private String sslTrustStorePassword = null;
+
+    @Config("orbit.jetty.ssl.cipherSuites.include")
+    private List<String> sslIncludedCipherSuites = new ArrayList<>();
+
+    @Config("orbit.jetty.ssl.cipherSuites.exclude")
+    private List<String> sslExcludedCipherSuites = new ArrayList<>();
+
+    @Config("orbit.jetty.ssl.clientAuth.enabled")
+    private boolean clientAuth = false;
 
 
     @Override
@@ -159,13 +193,58 @@ public class EmbeddedJettyServer implements Startable
         if(requestHeaderSize != null) httpConfiguration.setRequestHeaderSize(requestHeaderSize);
         if(responseHeaderSize != null) httpConfiguration.setResponseHeaderSize(responseHeaderSize);
         if(outputBufferSize != null) httpConfiguration.setOutputBufferSize(outputBufferSize);
-        final HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfiguration);
 
         // Create connector
         List<ServerConnector> connectors = new ArrayList<>();
-        final ServerConnector connector = new ServerConnector(server, httpConnectionFactory);
-        connector.setPort(port);
-        connectors.add(connector);
+        if (enableSSL)
+        {
+            // SSL HTTP Configuration
+            final SslContextFactory sslContextFactory = new SslContextFactory();
+            sslContextFactory.setNeedClientAuth(clientAuth);
+            if (sslKeyStorePath != null)
+            {
+                sslContextFactory.setKeyStorePath(sslKeyStorePath);
+            }
+            if (sslKeyStorePassword != null)
+            {
+                sslContextFactory.setKeyStorePassword(sslKeyStorePassword);
+            }
+            if (sslKeyManagerPassword != null)
+            {
+                sslContextFactory.setKeyManagerPassword(sslKeyManagerPassword);
+            }
+            if (sslTrustStorePath != null)
+            {
+                sslContextFactory.setTrustStorePath(sslTrustStorePath);
+            }
+            if (sslTrustStorePassword != null)
+            {
+                sslContextFactory.setTrustStorePassword(sslTrustStorePassword);
+            }
+            if (sslIncludedCipherSuites != null)
+            {
+                sslContextFactory.setIncludeCipherSuites(sslIncludedCipherSuites.toArray(new String[0]));
+            }
+            if (sslExcludedCipherSuites != null)
+            {
+                sslContextFactory.setExcludeCipherSuites(sslExcludedCipherSuites.toArray(new String[0]));
+            }
+            final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
+            httpsConfiguration.addCustomizer(new SecureRequestCustomizer());
+            // SSL connector
+            final ServerConnector sslConnector = new ServerConnector(server,
+                    new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()),
+                    new HttpConnectionFactory(httpsConfiguration));
+            sslConnector.setPort(port);
+            connectors.add(sslConnector);
+        }
+        else
+        {
+            final HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfiguration);
+            final ServerConnector connector = new ServerConnector(server, httpConnectionFactory);
+            connector.setPort(port);
+            connectors.add(connector);
+        }
 
         // Create the server
         ServerConnector[] actualList = new ServerConnector[connectors.size()];
