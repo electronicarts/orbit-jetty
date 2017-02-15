@@ -126,6 +126,12 @@ public class EmbeddedJettyServer implements Startable
     @Config("orbit.jetty.ssl.clientAuth.enabled")
     private boolean clientAuth = false;
 
+    @Config("orbit.jetty.ssl.protocols.include")
+    private List<String> sslIncludedProtocols = new ArrayList<>();
+
+    @Config("orbit.jetty.ssl.protocols.exclude")
+    private List<String> sslExcludedProtocols = new ArrayList<>();
+
 
     @Override
     public Task start()
@@ -228,6 +234,14 @@ public class EmbeddedJettyServer implements Startable
             if (sslExcludedCipherSuites != null)
             {
                 sslContextFactory.setExcludeCipherSuites(sslExcludedCipherSuites.toArray(new String[0]));
+            }
+            if (sslIncludedProtocols != null)
+            {
+                sslContextFactory.setIncludeProtocols(sslIncludedProtocols.toArray(new String[0]));
+            }
+            if (sslExcludedProtocols != null)
+            {
+                sslContextFactory.setExcludeProtocols(sslExcludedProtocols.toArray(new String[0]));
             }
             final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
             httpsConfiguration.addCustomizer(new SecureRequestCustomizer());
