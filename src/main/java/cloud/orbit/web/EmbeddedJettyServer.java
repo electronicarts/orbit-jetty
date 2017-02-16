@@ -118,13 +118,19 @@ public class EmbeddedJettyServer implements Startable
     private String sslTrustStorePassword = null;
 
     @Config("orbit.jetty.ssl.cipherSuites.include")
-    private List<String> sslIncludedCipherSuites = new ArrayList<>();
+    private List<String> sslIncludedCipherSuites = null;
 
     @Config("orbit.jetty.ssl.cipherSuites.exclude")
-    private List<String> sslExcludedCipherSuites = new ArrayList<>();
+    private List<String> sslExcludedCipherSuites = null;
 
     @Config("orbit.jetty.ssl.clientAuth.enabled")
     private boolean clientAuth = false;
+
+    @Config("orbit.jetty.ssl.protocols.include")
+    private List<String> sslIncludedProtocols = null;
+
+    @Config("orbit.jetty.ssl.protocols.exclude")
+    private List<String> sslExcludedProtocols = null;
 
 
     @Override
@@ -223,11 +229,19 @@ public class EmbeddedJettyServer implements Startable
             }
             if (sslIncludedCipherSuites != null)
             {
-                sslContextFactory.setIncludeCipherSuites(sslIncludedCipherSuites.toArray(new String[0]));
+                sslContextFactory.setIncludeCipherSuites(sslIncludedCipherSuites.toArray(new String[sslIncludedCipherSuites.size()]));
             }
             if (sslExcludedCipherSuites != null)
             {
-                sslContextFactory.setExcludeCipherSuites(sslExcludedCipherSuites.toArray(new String[0]));
+                sslContextFactory.setExcludeCipherSuites(sslExcludedCipherSuites.toArray(new String[sslExcludedCipherSuites.size()]));
+            }
+            if (sslIncludedProtocols != null)
+            {
+                sslContextFactory.setIncludeProtocols(sslIncludedProtocols.toArray(new String[sslIncludedProtocols.size()]));
+            }
+            if (sslExcludedProtocols != null)
+            {
+                sslContextFactory.setExcludeProtocols(sslExcludedProtocols.toArray(new String[sslExcludedProtocols.size()]));
             }
             final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
             httpsConfiguration.addCustomizer(new SecureRequestCustomizer());
