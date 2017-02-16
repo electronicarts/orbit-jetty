@@ -229,19 +229,19 @@ public class EmbeddedJettyServer implements Startable
             }
             if (sslIncludedCipherSuites != null)
             {
-                sslContextFactory.setIncludeCipherSuites(sslIncludedCipherSuites.toArray(new String[0]));
+                sslContextFactory.setIncludeCipherSuites(sslIncludedCipherSuites.toArray(new String[sslIncludedCipherSuites.size()]));
             }
             if (sslExcludedCipherSuites != null)
             {
-                sslContextFactory.setExcludeCipherSuites(sslExcludedCipherSuites.toArray(new String[0]));
+                sslContextFactory.setExcludeCipherSuites(sslExcludedCipherSuites.toArray(new String[sslExcludedCipherSuites.size()]));
             }
             if (sslIncludedProtocols != null)
             {
-                sslContextFactory.setIncludeProtocols(sslIncludedProtocols.toArray(new String[0]));
+                sslContextFactory.setIncludeProtocols(sslIncludedProtocols.toArray(new String[sslIncludedProtocols.size()]));
             }
             if (sslExcludedProtocols != null)
             {
-                sslContextFactory.setExcludeProtocols(sslExcludedProtocols.toArray(new String[0]));
+                sslContextFactory.setExcludeProtocols(sslExcludedProtocols.toArray(new String[sslExcludedProtocols.size()]));
             }
             final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
             httpsConfiguration.addCustomizer(new SecureRequestCustomizer());
