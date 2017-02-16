@@ -118,19 +118,19 @@ public class EmbeddedJettyServer implements Startable
     private String sslTrustStorePassword = null;
 
     @Config("orbit.jetty.ssl.cipherSuites.include")
-    private List<String> sslIncludedCipherSuites = new ArrayList<>();
+    private List<String> sslIncludedCipherSuites = null;
 
     @Config("orbit.jetty.ssl.cipherSuites.exclude")
-    private List<String> sslExcludedCipherSuites = new ArrayList<>();
+    private List<String> sslExcludedCipherSuites = null;
 
     @Config("orbit.jetty.ssl.clientAuth.enabled")
     private boolean clientAuth = false;
 
     @Config("orbit.jetty.ssl.protocols.include")
-    private List<String> sslIncludedProtocols = new ArrayList<>();
+    private List<String> sslIncludedProtocols = null;
 
     @Config("orbit.jetty.ssl.protocols.exclude")
-    private List<String> sslExcludedProtocols = new ArrayList<>();
+    private List<String> sslExcludedProtocols = null;
 
 
     @Override
