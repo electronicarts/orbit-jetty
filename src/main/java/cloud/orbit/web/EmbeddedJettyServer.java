@@ -132,6 +132,9 @@ public class EmbeddedJettyServer implements Startable
     @Config("orbit.jetty.ssl.protocols.exclude")
     private List<String> sslExcludedProtocols = null;
 
+    @Config("orbit.jetty.ssl.certAlias")
+    private String certAlias = null;
+
 
     @Override
     public Task start()
@@ -243,6 +246,11 @@ public class EmbeddedJettyServer implements Startable
             {
                 sslContextFactory.setExcludeProtocols(sslExcludedProtocols.toArray(new String[sslExcludedProtocols.size()]));
             }
+            if (certAlias != null)
+            {
+                sslContextFactory.setCertAlias(certAlias);
+            }
+
             final HttpConfiguration httpsConfiguration = new HttpConfiguration(httpConfiguration);
             httpsConfiguration.addCustomizer(new SecureRequestCustomizer());
             // SSL connector
